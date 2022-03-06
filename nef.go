@@ -85,7 +85,7 @@ func New(stackSize uint, previousError interface{}, codeReference int, devNote s
 					break
 				}
 				nefFrame := &NefStackFrame{File: frame.File, Function: frame.Function, Line: frame.Line}
-				stackTrace := append(stackTrace, nefFrame)
+				stackTrace = append(stackTrace, nefFrame)
 				pStack = &stackTrace
 				if !more {
 					break

@@ -33,12 +33,12 @@ func TestStackSizeGreaterThanZero(t *testing.T) {
 	if stack == nil {
 		t.Errorf("Stack should be greater than zero (A)")
 	}
-	if len(*stack) < 1 {
-		t.Errorf("Stack should be greater than zero (B)")
+	if len(*stack) != 2 {
+		t.Errorf("Stack depth should be 2:%d", len(*stack))
 	}
-	for frame := range *stack {
-		fmt.Println(frame)
-	}
+	//for index, frame := range *stack {
+	//	fmt.Println(index, frame)
+	//}
 }
 
 func TestPreviousSystemError(t *testing.T) {
