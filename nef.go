@@ -4,7 +4,7 @@ package nef
 //to make the formatting of our stack trace more robust and quicker for devs to locate code
 //and debug microservices
 
-//Example
+//TODO: There may be an issue with stripping local directory references in the build utility of go
 //go build -trimpath - strip local file name references from cmd and asm
 
 import (

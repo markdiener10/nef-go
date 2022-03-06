@@ -1,3 +1,3 @@
-module github.com/markdiener10/go-nef
+module github.com/markdiener10/nef-go
 
 go 1.17

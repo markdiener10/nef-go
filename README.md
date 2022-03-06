@@ -1,4 +1,4 @@
-# go-nef
+# nef-go
 Golang New Error Framework
 
 After years of looking at other teams code which adopted the
