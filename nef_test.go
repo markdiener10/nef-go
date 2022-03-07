@@ -45,7 +45,7 @@ func TestPreviousSystemError(t *testing.T) {
 
 	err := errors.New("Previous System Error")
 	nef := New(0, err, 0, "")
-	if nef.CastErr() == nil {
+	if nef.PrevErr() == nil {
 		t.Errorf("System Error should be retrievable")
 	}
 
@@ -56,19 +56,19 @@ func TestPreviousNef(t *testing.T) {
 	nefPrevious := New(0, nil, 0, "Previous Error")
 	nef := New(0, nefPrevious, 0, "Current Error")
 
-	if nef.CastNef() == nil {
+	if nef.PrevNef() == nil {
 		t.Errorf("Previous Nef should be retrievable")
 	}
 
 	count := 0
 	prev := nef
 	for {
-		prev = nef.CastNef()
+		prev = nef.PrevNef()
 		if prev == nil {
 			break
 		}
 		count++
-		if prev.CastErr() != nil {
+		if prev.PrevErr() != nil {
 			t.Errorf("Previous System Error should not exist")
 		}
 		nef = prev
@@ -89,12 +89,12 @@ func TestPreviousNefAndSystemError(t *testing.T) {
 	prev := nef
 	for {
 
-		prev = nef.CastNef()
+		prev = nef.PrevNef()
 		if prev == nil {
 			break
 		}
 
-		if nef.CastErr() == nil {
+		if nef.PrevErr() == nil {
 			t.Errorf("Previous System Error should not exist")
 		}
 		count++
@@ -105,7 +105,7 @@ func TestPreviousNefAndSystemError(t *testing.T) {
 		t.Errorf("Layered error count != 1:%d", count)
 	}
 
-	err = nef.CastErr()
+	err = nef.PrevErr()
 	if err == nil {
 		t.Errorf("Previous System Error should exist")
 	}

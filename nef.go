@@ -50,7 +50,7 @@ func (g *Nef) Stack() *[]*NefStackFrame {
 	return g.stackTrace
 }
 
-func (g *Nef) CastNef() *Nef {
+func (g *Nef) PrevNef() *Nef {
 	nef, ok := g.previousError.(*Nef)
 	if !ok {
 		return nil
@@ -58,7 +58,7 @@ func (g *Nef) CastNef() *Nef {
 	return nef
 }
 
-func (g *Nef) CastErr() error {
+func (g *Nef) PrevErr() error {
 	err, ok := g.previousError.(error)
 	if !ok {
 		return nil
