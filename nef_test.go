@@ -2,7 +2,7 @@ package nef
 
 import (
 	"errors"
-	"fmt"
+	_ "fmt"
 	"strings"
 	"testing"
 )
@@ -110,8 +110,8 @@ func TestPreviousNefAndSystemError(t *testing.T) {
 		t.Errorf("Previous System Error should exist")
 	}
 
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	//if err != nil {
+	//fmt.Println(err.Error())
+	//}
 
 }
