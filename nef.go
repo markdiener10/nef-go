@@ -50,12 +50,8 @@ func (g *Nef) Stack() *[]*NefStackFrame {
 	return g.stackTrace
 }
 
-func (g *Nef) PrevNef() *Nef {
-	nef, ok := g.previousError.(*Nef)
-	if !ok {
-		return nil
-	}
-	return nef
+func (g *Nef) IsPrevErr() bool {
+	return g.previousError != nil
 }
 
 func (g *Nef) PrevErr() error {
@@ -77,6 +73,14 @@ func (g *Nef) PrevErrs() []error {
 		return *erra
 	}
 	return nil
+}
+
+func (g *Nef) PrevNef() *Nef {
+	nef, ok := g.previousError.(*Nef)
+	if !ok {
+		return nil
+	}
+	return nef
 }
 
 //Original signature
@@ -120,9 +124,7 @@ func New(stackSize uint, parms ...interface{}) *Nef {
 	for _, gparm = range parms {
 
 		switch gparm.(type) {
-		case Nef:
-			continue
-		case error, []error, *error, *[]error, *Nef:
+		case error, []error, *error, *[]error, *Nef, Nef:
 			//Only take first error
 			if gpreverr != nil {
 				continue

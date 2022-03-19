@@ -21,7 +21,9 @@ For convenience, a form of Panic() has been provided to allow for the Nef* objec
 The variable parameters can be described:
 
 Reference Code: Supply a code useable for error processing further up the stack
+
 Previous Error: Pass an error,[]error, or *Nef 
+
 Developer Note: A formatted string for specific error information capture
 
 All variable parameters are optional. The order of the parameters affect the behavior of the output.Generally pass in a reference code as the first variable parameters.  Then pass in the previous error.  And finally pass a formatted string with additional parameters as described in the standard library fmt.Sprintf().  
@@ -47,9 +49,14 @@ Upon generation of a *Nef value, interface functions are available:
 Nef.Stack() - return an array of NefStackFrame structures that allow for easy formatting of call stack information (Only returns the caller of nef.New() and upwards.
 
 Nef.Code() - package defined error code
+
 Nef.Note() - return DevNote with all parameters formatted
+
 Nef.Error() - return DevNote but also conform to system error interface 
 
+And a block of access functions 
+
+Nef.IsPrev() - returns true if there was a previous error passed
 Nef.PrevErr() - return any previous error value or nil if not passed as a parameter
 Nef.PrevErrs() - return any previous []error value or nil if not passed as a parameter
 Nef.PrevNef() - return any previous *Nef value or nil if not passed as a parameter
