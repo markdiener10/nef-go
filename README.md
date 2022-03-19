@@ -56,10 +56,10 @@ Nef.Error() - return DevNote but also conform to system error interface
 
 And a block of access functions 
 
-Nef.IsPrev() - returns true if there was a previous error passed
-Nef.PrevErr() - return any previous error value or nil if not passed as a parameter
-Nef.PrevErrs() - return any previous []error value or nil if not passed as a parameter
-Nef.PrevNef() - return any previous *Nef value or nil if not passed as a parameter
+Nef.IsPrev() - returns true if there was a previous error passed  
+Nef.PrevErr() - return any previous error value or nil if not passed as a parameter  
+Nef.PrevErrs() - return any previous []error value or nil if not passed as a parameter  
+Nef.PrevNef() - return any previous *Nef value or nil if not passed as a parameter  
 
 ## Developer Notes
 
