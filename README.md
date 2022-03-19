@@ -13,7 +13,7 @@ import (
 
 There is a single call in the interface for error construction and diagnostic data capture:
 
-New(STACKTRACESIZE, VARIABLE PARAMETERS)
+nef.New(STACKTRACESIZE, VARIABLE PARAMETERS)
 	
 For convenience, a form of Panic() has been provided to allow for the Nef* object to be properly allocated and then the system panic() function is called with Nef passed in.
 
@@ -29,12 +29,12 @@ While possible to pass in multiple error values, only the first error passed wil
 
 Some examples are helpful:
 
-New(0) -> Generate *Nef with no stack trace  
-New(2) -> Generate *Nef with a stack trace size of 2  
-New(0,errors.New("Error String")) -> Generate *Nef with no stack trace and previous error  
-New(2,MYREFRENCECODE) -> Generate *Nef with stacksize of 2 and reference code  
-New(3,"Developer Note:%d:%d:%s",87,92,"String Parm") -> Generate *Nef with stacksize of 3 and formatted string with parameters  
-New(2,MYREFRENCECODE,errors.New("Error String"),"Developer Note:%d:%d:%s",87,92,"String Parm")  
+nef.New(0) -> Generate *Nef with no stack trace  
+nef.New(2) -> Generate *Nef with a stack trace size of 2  
+nef.New(0,errors.New("Error String")) -> Generate *Nef with no stack trace and previous error  
+nef.New(2,MYREFRENCECODE) -> Generate *Nef with stacksize of 2 and reference code  
+nef.New(3,"Developer Note:%d:%d:%s",87,92,"String Parm") -> Generate *Nef with stacksize of 3 and formatted string with parameters  
+nef.New(2,MYREFRENCECODE,errors.New("Error String"),"Developer Note:%d:%d:%s",87,92,"String Parm")  
 
 Upon generation of a *Nef value, interface functions are available:
 
