@@ -42,8 +42,8 @@ func (g *Nef) Code() int {
 	return g.codeReference
 }
 
-func (g *Nef) Note() *string {
-	return &g.devNote
+func (g *Nef) Note() string {
+	return g.devNote
 }
 
 func (g *Nef) Stack() *[]*NefStackFrame {
@@ -66,7 +66,24 @@ func (g *Nef) PrevErr() error {
 	return err
 }
 
-func New(stackSize uint, previousError interface{}, codeReference int, devNote string, args ...interface{}) *Nef {
+func (g *Nef) PrevErrs() []error {
+
+	err, ok := g.previousError.([]error)
+	if ok {
+		return err
+	}
+	erra, ok := g.previousError.(*[]error)
+	if ok {
+		return *erra
+	}
+	return nil
+}
+
+//Original signature
+//func New(stackSize uint, previousError interface{}, codeReference int, devNote string, args ...interface{}) *Nef {
+
+//New signature
+func New(stackSize uint, parms ...interface{}) *Nef {
 
 	var pStack *[]*NefStackFrame = nil
 
@@ -94,17 +111,67 @@ func New(stackSize uint, previousError interface{}, codeReference int, devNote s
 		}
 	}
 
-	//Need to get the stack one level higher than this
+	var gpreverr interface{} = nil
+	var gdevnote string = ""
+	var gsubparms = make([]interface{}, 0)
+	var gcode int = 0
+	var gparm interface{}
+
+	for _, gparm = range parms {
+
+		switch gparm.(type) {
+		case Nef:
+			continue
+		case error, []error, *error, *[]error, *Nef:
+			//Only take first error
+			if gpreverr != nil {
+				continue
+			}
+			gpreverr = gparm
+			continue
+		case string: //DevNote afterwards by convention
+			if gdevnote == "" {
+				gdevnote = gparm.(string)
+				continue
+			}
+			gsubparms = append(gsubparms, gparm)
+			continue
+		case *string:
+			if gdevnote == "" {
+				gdevnote = *(gparm.(*string))
+				continue
+			}
+			gsubparms = append(gsubparms, gparm)
+			continue
+		case int:
+			//Put the reference code before the devnote in the parms
+			if gdevnote == "" {
+				if gcode != 0 {
+					continue
+				}
+				gcode = (gparm.(int))
+				continue
+			}
+			gsubparms = append(gsubparms, gparm)
+		default:
+			gsubparms = append(gsubparms, gparm)
+		}
+	}
+
+	if gdevnote != "" {
+		gdevnote = fmt.Sprintf(gdevnote, gsubparms...)
+	}
+
 	//and keep going up until we reach the top
 	return &Nef{
 		stackTrace:    pStack,
-		previousError: previousError,
-		codeReference: codeReference,
-		devNote:       fmt.Sprintf(devNote, args...),
+		previousError: gpreverr,
+		codeReference: gcode,
+		devNote:       gdevnote,
 	}
 }
 
-func Panic(stackSize uint, previousError interface{}, codeReference int, devNote string, args ...interface{}) {
-	nef := New(stackSize, previousError, codeReference, devNote, args...)
+func Panic(stackSize uint, args ...interface{}) {
+	nef := New(stackSize, args...)
 	panic(nef)
 }

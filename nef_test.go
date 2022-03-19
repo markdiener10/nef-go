@@ -8,7 +8,7 @@ import (
 )
 
 func TestNoContent(t *testing.T) {
-	nef := New(0, nil, 0, "")
+	nef := New(0)
 	stack := nef.Stack()
 	if stack != nil { //"No Trace"
 		t.Errorf("Stack should be nil:%d", len(*stack))
@@ -17,18 +17,18 @@ func TestNoContent(t *testing.T) {
 
 func TestDevNote(t *testing.T) {
 
-	nef := New(0, nil, 0, "Dev Note Added:%d", 25)
-	if nef.Note() == nil {
+	nef := New(0, "Dev Note Added:%d", 25)
+	if nef.Note() == "" {
 		t.Errorf("Note should not be nil")
 	}
-	if !strings.Contains(*nef.Note(), "Dev Note Added") {
+	if !strings.Contains(nef.Note(), "Dev Note Added") {
 		t.Errorf("Note was not set correctly")
 	}
 
 }
 
 func TestStackSizeGreaterThanZero(t *testing.T) {
-	nef := New(10, nil, 0, "")
+	nef := New(2)
 	stack := nef.Stack()
 	if stack == nil {
 		t.Errorf("Stack should be greater than zero (A)")
@@ -42,9 +42,8 @@ func TestStackSizeGreaterThanZero(t *testing.T) {
 }
 
 func TestPreviousSystemError(t *testing.T) {
-
 	err := errors.New("Previous System Error")
-	nef := New(0, err, 0, "")
+	nef := New(0, err)
 	if nef.PrevErr() == nil {
 		t.Errorf("System Error should be retrievable")
 	}
@@ -53,8 +52,8 @@ func TestPreviousSystemError(t *testing.T) {
 
 func TestPreviousNef(t *testing.T) {
 
-	nefPrevious := New(0, nil, 0, "Previous Error")
-	nef := New(0, nefPrevious, 0, "Current Error")
+	nefPrevious := New(0, "Previous Error")
+	nef := New(0, nefPrevious)
 
 	if nef.PrevNef() == nil {
 		t.Errorf("Previous Nef should be retrievable")
@@ -82,8 +81,8 @@ func TestPreviousNef(t *testing.T) {
 func TestPreviousNefAndSystemError(t *testing.T) {
 
 	err := errors.New("First System Error")
-	nefPrevious := New(0, err, 0, "Second Nef Error")
-	nef := New(0, nefPrevious, 0, "Third Nef Error")
+	nefPrevious := New(0, err, "Second Nef Error")
+	nef := New(0, nefPrevious, "Third Nef Error")
 
 	count := 0
 	prev := nef
@@ -113,5 +112,26 @@ func TestPreviousNefAndSystemError(t *testing.T) {
 	//if err != nil {
 	//fmt.Println(err.Error())
 	//}
+
+}
+
+func TestCodeParameter(t *testing.T) {
+
+	nef := New(0, 35)
+	if nef.Code() != 35 {
+		t.Errorf("Reference code not recovered:%d", nef.Code())
+	}
+
+}
+
+func TestAllParameters(t *testing.T) {
+
+	nef := New(0, 45, errors.New("Previous System Error"), "DevNote:%s", "Inserted String")
+	if nef.Code() != 45 {
+		t.Errorf("Reference code not recovered:%d", nef.Code())
+	}
+	if nef.Note() != "DevNote:Inserted String" {
+		t.Errorf("DevNote not recovered:%s", nef.Note())
+	}
 
 }
