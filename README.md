@@ -38,17 +38,17 @@ nef.New(2,MYREFRENCECODE,errors.New("Error String"),"Developer Note:%d:%d:%s",87
 
 Upon generation of a *Nef value, interface functions are available:
 
-Nef.Stack() - return an array of NefStackFrame structures that allow for easy formatting of call stack information (Only returns the caller of nef.New() and upwards.  
-Nef.Code() - package defined error code  
-Nef.Note() - return DevNote with all parameters formatted  
-Nef.Error() - return DevNote but also conform to system error interface  
+*Nef.Stack() - return an array of NefStackFrame structures that allow for easy formatting of call stack information (Only returns the caller of nef.New() and upwards.)  
+*Nef.Code() - package defined error code  
+*Nef.Note() - return DevNote with all parameters formatted  
+*Nef.Error() - return DevNote but also conform to system error interface  
 
 And a block of access functions for previous error information:  
 
-Nef.IsPrev() - returns true if there was a previous error passed  
-Nef.PrevErr() - return any previous error value or nil if not passed as a parameter  
-Nef.PrevErrs() - return any previous []error value or nil if not passed as a parameter  
-Nef.PrevNef() - return any previous *Nef value or nil if not passed as a parameter  
+*Nef.IsPrev() - returns true if there was a previous error passed  
+*Nef.PrevErr() - return any previous error value or nil if not passed as a parameter  
+*Nef.PrevErrs() - return any previous []error value or nil if not passed as a parameter  
+*Nef.PrevNef() - return any previous *Nef value or nil if not passed as a parameter  
 
 ## Developer Notes
 
