@@ -6,11 +6,10 @@ Golang New Error Framework
 
 First import the library from the open source repo:
 
-import (
-	nef "github.com/markdiener10/nef-go"
-)
-
-Preface the the library reference with "nef" for easier package access
+import (  
+	nef "github.com/markdiener10/nef-go"  
+)  
+(Preface the the library reference with "nef" for easier package access)  
 
 There is a single call in the interface for error construction and diagnostic data capture:
 
@@ -31,7 +30,7 @@ While possible to pass in multiple error values, only the first error passed wil
 Some examples are helpful:
 
 New(0) -> Generate *Nef with no stack trace  
-New(2) -> Generata *Nef with a stack trace size of 2  
+New(2) -> Generate *Nef with a stack trace size of 2  
 New(0,errors.New("Error String")) -> Generate *Nef with no stack trace and previous error  
 New(2,MYREFRENCECODE) -> Generate *Nef with stacksize of 2 and reference code  
 New(3,"Developer Note:%d:%d:%s",87,92,"String Parm") -> Generate *Nef with stacksize of 3 and formatted string with parameters  
