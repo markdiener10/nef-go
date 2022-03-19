@@ -7,7 +7,7 @@ Golang New Error Framework
 First import the library from the open source repo:
 
 import (  
-	nef "github.com/markdiener10/nef-go"  
+    nef "github.com/markdiener10/nef-go"  
 )  
 (Preface the the library reference with "nef" for easier package access)  
 
