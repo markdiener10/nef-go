@@ -5,36 +5,54 @@ Golang New Error Framework
 ## Usage
 
 First import the library from the open source repo:
+
 import (
 	nef "github.com/markdiener10/nef-go"
 )
 
-Usually preface the name of the library with "nef" for easier package scope access
+Preface the the library reference with "nef" for easier package access
 
-There is a single call in the interface for error construction and capture
+There is a single call in the interface for error construction and diagnostic data capture:
 
-nef := nef.New(10, err, MYERRORCONSTANT, "Place your devops note here:%d %s",MYTESTVALUE,MYTESTSTRING)
+New(STACKTRACESIZE, VARIABLE PARAMETERS)
 	
-For convenience, a form of Panic() has been provided to allow for the Nef* object to be properly allocated
-and then the system panic() function is called with Nef passed in.
+For convenience, a form of Panic() has been provided to allow for the Nef* object to be properly allocated and then the system panic() function is called with Nef passed in.
 
-The parameters and returns are as follows:
+The variable parameters can be described:
 
-func New(StackSize,PreviousErrorOrNef,ConstantValue,DevNote) *Nef
+Reference Code: Supply a code useable for error processing further up the stack
+Previous Error: Pass an error,[]error, or *Nef 
+Developer Note: A formatted string for specific error information capture
 
-1) StackSize - Set the max depth of the captured call stack from the point of calling nef.New() and upwards. Values less than 1 disables the feature.  Generally 10 is a good number.
-2) PreviousErrororNefPtr - Previous err or Nef*. (This is similar to the Wrap() in github/pkg/errors)
-3) ConstantValue - A library user defined code to pass upwards to the package user.  Generally use a const NAME = VAL statement to define specific error or control codes.
-4) DevNote - The equivalent of "Message" in err.Error() string. Generally to capture specific data at the  point of call.
+All variable parameters are optional. The order of the parameters affect the behavior of the output.Generally pass in a reference code as the first variable parameters.  Then pass in the previous error.  And finally pass a formatted string with additional parameters as described in the standard library fmt.Sprintf().  
 
-For later processing, receiver functions are defined to allow for easier processing of the error data.
+While possible to pass in multiple error values, only the first error passed will be captured as the previous error.  Additional errors passed will be ignored.
 
-Nef.Error() - conform to the error interface for compliance reasons (returns DevNote)
-Nef.Code() - package defined error code
-Nef.Note() - return DevNote as a formatted string
-Nef.PrevNef() - return any previous Nef value. Nil if Nef was not constructed with a prior *Nef value
-Nef.PrevErr() - return any previous error value. Nil if Nef was not constructed with a prior error value
+Some examples are helpful:
+
+New(0) -> Generate *Nef with no stack trace
+
+New(2) -> Generata *Nef with a stack trace size of 2
+
+New(0,errors.New("Error String")) -> Generate *Nef with no stack trace and previous error
+
+New(2,MYREFRENCECODE) -> Generate *Nef with stacksize of 2 and reference code
+
+New(3,"Developer Note:%d:%d:%s",87,92,"String Parm") -> Generate *Nef with stacksize of 3 and formatted string with parameters
+
+New(2,MYREFRENCECODE,errors.New("Error String"),"Developer Note:%d:%d:%s",87,92,"String Parm")
+
+Upon generation of a *Nef value, interface functions are available:
+
 Nef.Stack() - return an array of NefStackFrame structures that allow for easy formatting of call stack information (Only returns the caller of nef.New() and upwards.
+
+Nef.Code() - package defined error code
+Nef.Note() - return DevNote with all parameters formatted
+Nef.Error() - return DevNote but also conform to system error interface 
+
+Nef.PrevErr() - return any previous error value or nil if not passed as a parameter
+Nef.PrevErrs() - return any previous []error value or nil if not passed as a parameter
+Nef.PrevNef() - return any previous *Nef value or nil if not passed as a parameter
 
 ## Developer Notes
 
