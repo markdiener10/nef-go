@@ -31,10 +31,15 @@ Some examples are helpful:
 
 nef.New(0) -> Generate *Nef with no stack trace  
 nef.New(2) -> Generate *Nef with a stack trace size of 2  
-nef.New(0,errors.New("Error String")) -> Generate *Nef with no stack trace and previous error  
 nef.New(2,MYREFRENCECODE) -> Generate *Nef with stacksize of 2 and reference code  
 nef.New(3,"Developer Note:%d:%d:%s",87,92,"String Parm") -> Generate *Nef with stacksize of 3 and formatted string with parameters  
-nef.New(2,MYREFRENCECODE,errors.New("Error String"),"Developer Note:%d:%d:%s",87,92,"String Parm")  
+
+Many times, you will receive an error from another library function return: prevError = errors.New("previous error")  
+
+nef.New(0,prevError) -> Generate *Nef with no stack trace and previous error  
+nef.New(2,MYREFRENCECODE,prevError,"Developer Note:%d:%d:%s",87,92,"String Parm")  
+
+But you can pass in a previous *Nef value or even []error for stuffing multiple error values.  
 
 Upon generation of a *Nef value, interface functions are available:
 
