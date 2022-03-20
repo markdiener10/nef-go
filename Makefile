@@ -11,4 +11,5 @@ clean:
 
 test: 
 	go vet 
-	go test 
+	go test -cover
+
