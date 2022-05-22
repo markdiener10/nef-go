@@ -1,0 +1,5 @@
+make: Entering directory `/Users/sdev/golang/nef-go'
+go vet 
+go test -cover
+make: Leaving directory `/Users/sdev/golang/nef-go'
+ 

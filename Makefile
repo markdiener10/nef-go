@@ -13,3 +13,8 @@ test:
 	go vet 
 	go test -cover
 
+coverage: 	
+	rm -f ./coverage.out
+	go test -coverprofile=./coverage.out
+	go tool cover -html=./coverage.out	
+

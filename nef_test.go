@@ -13,6 +13,15 @@ func TestNoContent(t *testing.T) {
 	if stack != nil { //"No Trace"
 		t.Errorf("Stack should be nil:%d", len(*stack))
 	}
+	if nef.Error() != "" {
+		t.Errorf("Stack message should be empty")
+	}
+	if nef.IsPrevErr() != false {
+		t.Errorf("Object should not have previous error")
+	}
+	if nef.PrevErrs() != nil {
+		t.Errorf("Object should not have previous errors array")
+	}
 }
 
 func TestDevNote(t *testing.T) {
@@ -124,6 +133,24 @@ func TestCodeParameter(t *testing.T) {
 
 }
 
+func TestCodeStringPointer(t *testing.T) {
+
+	s := ""
+
+	nef := New(0, 35, &s)
+	if nef.Code() != 35 {
+		t.Errorf("Reference code not recovered:%d", nef.Code())
+	}
+
+	s = "String Pointer"
+
+	nef = New(0, 35, &s)
+	if nef.Code() != 35 {
+		t.Errorf("Reference code not recovered:%d", nef.Code())
+	}
+
+}
+
 func TestAllParameters(t *testing.T) {
 
 	nef := New(0, 45, errors.New("Previous System Error"), "DevNote:%s", "Inserted String")
@@ -133,5 +160,32 @@ func TestAllParameters(t *testing.T) {
 	if nef.Note() != "DevNote:Inserted String" {
 		t.Errorf("DevNote not recovered:%s", nef.Note())
 	}
+
+}
+
+func TestNefPanic(t *testing.T) {
+
+	defer func() {
+		nf := recover()
+		if nf == nil {
+			t.Errorf("Panic NEF should be non-null")
+		}
+	}()
+
+	Panic(0, "Dev Note Added:%d", 25)
+
+	t.Errorf("Should not be able to reach post-panic code")
+
+}
+
+func TestCodePrevErrorsArray(t *testing.T) {
+
+	s := "String Pointer"
+
+	errs := []error{errors.New("One"), errors.New("Two")}
+	nef := New(0, 35, errs, &s, &s)
+	_ = nef.PrevErrs()
+	nef = New(0, 35, &errs)
+	_ = nef.PrevErrs()
 
 }
